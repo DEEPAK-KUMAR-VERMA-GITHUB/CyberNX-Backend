@@ -16,7 +16,7 @@ const app = express();
 // middlewares
 app.use(
   cors({
-    origin: true,
+    origin: "https://cyber-nx-backend.vercel.app",
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     allowedHeaders: ["Content-Type", "Authorization"],

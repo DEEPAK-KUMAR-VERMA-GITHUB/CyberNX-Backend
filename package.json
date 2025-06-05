@@ -4,6 +4,8 @@
   "main": "server.js",
   "author": "Deepak Kumar Verma <boostyourselfup@gmail.com>",
   "license": "MIT",
+  "description": "CyberNX Backend Server",
+  "type": "module",
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js"

@@ -26,6 +26,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
+app.get("/",(req,res) => {
+  res.send("Server is healthy");
+})
+
 // routes
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/jobs", jobRoutes);

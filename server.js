@@ -13,7 +13,7 @@ await DbConnect();
 
 const app = express();
 
-const allowedOrigins = ['https://cyber-nx-backend.vercel.app', 'http://localhost:3000'];
+const allowedOrigins = ['https://cyber-nx-frontend.vercel.app/', 'http://localhost:3000'];
 // middlewares
 app.use(cors({
   origin: function (origin, callback) {

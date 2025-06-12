@@ -1,7 +1,7 @@
 import ApplicationModel from "../models/application.model.js";
 import JobModel from "../models/job.model.js";
 import catchAsyncErrors from "../utils/catchAsyncErrors.js";
-import ErrorHandler from "../utils/errorHandler.js";
+import ErrorHandler from "../utils/ErrorHandler.js";
 
 export const applyForJob = catchAsyncErrors(async (req, res, next) => {
   const { jobId, resume, coverLetter } = req.body;

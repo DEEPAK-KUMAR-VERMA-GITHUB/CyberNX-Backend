@@ -58,9 +58,13 @@ export const applyForJob = catchAsyncErrors(async (req, res, next) => {
 
 // Get user's applications
 export const getUserApplications = catchAsyncErrors(async (req, res, next) => {
+  console.log(req.user._id);
+
   const applications = await ApplicationModel.find({ userId: req.user._id })
     .populate("jobId", "title company location type salary")
     .sort({ appliedDate: -1 });
+
+  console.log(applications);
 
   res.status(200).json({
     success: true,

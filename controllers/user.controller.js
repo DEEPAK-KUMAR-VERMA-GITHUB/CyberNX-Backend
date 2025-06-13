@@ -59,13 +59,13 @@ export const login = catchAsyncErrors(async (req, res, next) => {
   // generate token
   const token = user.getJwtToken();
 
+  const isProduction = process.env.NODE_ENV === "production";
+
   const cookieOptions = {
-    expires: new Date(
-      Date.now() + process.env.COOKIE_EXPIRE * 24 * 60 * 60 * 1000
-    ),
+    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 day
     httpOnly: true,
-    secure: true,
-    sameSite: "none",
+    secure: isProduction, // Only true in production
+    sameSite: isProduction ? "none" : "lax", // Avoid 'none' locally
     path: "/",
   };
 

@@ -28,7 +28,7 @@ export const applyForJob = catchAsyncErrors(async (req, res, next) => {
   // Check if user has already applied
   const existingApplication = await ApplicationModel.findOne({
     jobId,
-    userId: req.user.id,
+    userId: req.user._id,
   });
 
   if (existingApplication) {
@@ -39,14 +39,14 @@ export const applyForJob = catchAsyncErrors(async (req, res, next) => {
 
   const application = await ApplicationModel.create({
     jobId,
-    userId: req.user.id,
+    userId: req.user._id,
     resume,
     coverLetter,
   });
 
   // add applicant to job's applicants array
   await JobModel.findByIdAndUpdate(jobId, {
-    $push: { applicants: req.user.id },
+    $push: { applicants: req.user._id },
   });
 
   return res.status(201).json({
@@ -58,7 +58,7 @@ export const applyForJob = catchAsyncErrors(async (req, res, next) => {
 
 // Get user's applications
 export const getUserApplications = catchAsyncErrors(async (req, res, next) => {
-  const applications = await ApplicationModel.find({ userId: req.user.id })
+  const applications = await ApplicationModel.find({ userId: req.user._id })
     .populate("jobId", "title company location type salary")
     .sort({ appliedDate: -1 });
 
@@ -80,7 +80,7 @@ export const getJobApplications = catchAsyncErrors(async (req, res, next) => {
     return next(ErrorHandler.notFound("Job not found"));
   }
 
-  if (job.employer.toString() !== req.user.id) {
+  if (job.employer.toString() !== req.user._id.toString()) {
     return next(
       ErrorHandler.unauthorized(
         "You can only view applications for your own jobs"

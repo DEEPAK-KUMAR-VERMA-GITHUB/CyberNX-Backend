@@ -30,8 +30,12 @@ export const createJob = catchAsyncErrors(async (req, res, next) => {
     description,
     requirements,
     category,
-    employer: req.user.id,
+    employer: req.user._id,
   });
+
+  if (jobExists) {
+    return next(ErrorHandler.badRequest("Job already posted"));
+  }
 
   // Create job
   const job = await JobModel.create({
@@ -43,7 +47,7 @@ export const createJob = catchAsyncErrors(async (req, res, next) => {
     description,
     requirements,
     category,
-    employer: req.user.id,
+    employer: req.user._id,
   });
 
   return res.status(201).json({
@@ -113,7 +117,10 @@ export const updateJob = catchAsyncErrors(async (req, res, next) => {
   }
 
   // Check if user is the employer who posted the job
-  if (job.employer.toString() !== req.user.id && req.user.role !== "employer") {
+  if (
+    job.employer.toString() !== req.user._id &&
+    req.user.role !== "employer"
+  ) {
     return next(
       ErrorHandler.unauthorized("You can only update your own job listings")
     );
@@ -141,7 +148,10 @@ export const deleteJob = catchAsyncErrors(async (req, res, next) => {
   }
 
   // Check if user is the employer who posted the job
-  if (job.employer.toString() !== req.user.id && req.user.role !== "employer") {
+  if (
+    job.employer.toString() !== req.user._id &&
+    req.user.role !== "employer"
+  ) {
     return next(
       ErrorHandler.unauthorized("You can only delete your own job listings")
     );
@@ -158,7 +168,7 @@ export const deleteJob = catchAsyncErrors(async (req, res, next) => {
 
 // Get employer's jobs
 export const getEmployerJobs = catchAsyncErrors(async (req, res, next) => {
-  const jobs = await JobModel.find({ employer: req.user.id }).sort({
+  const jobs = await JobModel.find({ employer: req.user._id }).sort({
     postedDate: -1,
   });
 
